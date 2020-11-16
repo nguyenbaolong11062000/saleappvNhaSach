@@ -39,16 +39,6 @@ class User(db.Model, UserMixin):
     def __str__(self):
         return self.name
 
-class InfoUser(SaleBase):
-    __tablename__ = 'infouser'
-
-    id = Column(Integer, primary_key=True, autoincrement=True)
-    name = Column(String(50), nullable=False)
-    username = Column(String(100), nullable=False)
-    address = Column(String(200), nullable=False)
-    password = Column(String(100), nullable=False)
-    def __str__(self):
-        return self.name
 
 if __name__ == '__main__':
     db.create_all()
