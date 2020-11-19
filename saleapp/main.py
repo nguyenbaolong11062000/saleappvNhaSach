@@ -1,9 +1,7 @@
-from flask import render_template, request, redirect
+from flask import render_template, request
 from saleapp import app, login, utils
 from saleapp.admin import *
-from saleapp.models import User
 from flask_login import login_user
-import hashlib
 
 
 @app.route('/')
@@ -34,12 +32,10 @@ def product_detail(product_id):
 @app.route('/login', methods = ['post'])
 def login_usr():
     username = request.form.get('username')
-    password = request.form.get('password')
-    password = str(hashlib.md5(password.strip().encode('utf-8')).hexdigest())
+    password = request.form.get('password', '')
 
-    user = User.query.filter(User.username == username.strip(),
-                             User.password == password).first()
-
+    user = utils.check_login(username=username,
+                             password=password)
     if user:
         login_user(user=user)
 
@@ -49,7 +45,7 @@ def login_usr():
 
 @login.user_loader
 def get_user(user_id):
-    return User.query.get(user_id)
+    return utils.get_user_by_id(user_id=user_id)
 
 
 
