@@ -30,6 +30,7 @@ def product_detail(product_id):
     return render_template('product-detail.html',
                            product=product)
 
+
 @app.route('/login', methods = ['post'])
 def login_usr():
     username = request.form.get('username')
