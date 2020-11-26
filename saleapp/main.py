@@ -2,11 +2,8 @@ from flask import render_template, request
 from saleapp import app, login, utils
 from saleapp.admin import *
 from flask_login import login_user
-<<<<<<< HEAD
 import os
-=======
 
->>>>>>> 08b386353ec0bc27e4a9598795ef419bef17fa0e
 
 @app.route('/')
 def index():
