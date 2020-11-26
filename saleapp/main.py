@@ -1,10 +1,8 @@
-from flask import render_template, request, redirect
+from flask import render_template, request
 from saleapp import app, login, utils
 from saleapp.admin import *
-from saleapp.models import User
 from flask_login import login_user
-import hashlib
-
+import os
 
 @app.route('/')
 def index():
@@ -34,12 +32,10 @@ def product_detail(product_id):
 @app.route('/login', methods = ['post'])
 def login_usr():
     username = request.form.get('username')
-    password = request.form.get('password')
-    password = str(hashlib.md5(password.strip().encode('utf-8')).hexdigest())
+    password = request.form.get('password', '')
 
-    user = User.query.filter(User.username == username.strip(),
-                             User.password == password).first()
-
+    user = utils.check_login(username=username,
+                             password=password)
     if user:
         login_user(user=user)
 
@@ -47,9 +43,33 @@ def login_usr():
 
 
 
+@app.route('/register', methods=['get', 'post'])
+def register():
+    err_msg = ""
+    if request.method == 'POST':
+        password = request.form.get('password')
+        confirm = request.form.get('confirm')
+        if password == confirm:
+            name = request.form.get('name')
+            email = request.form.get('email')
+            username = request.form.get('username')
+            avatar = request.files["avatar"]
+
+            avatar_path = 'images/upload/%s' % avatar.filename
+            avatar.save(os.path.join(app.root_path, 'static/', avatar_path))
+            if utils.add_user(name=name, email=email, username=username,
+                              password=password, avatar_path=avatar_path):
+                return redirect('/')
+            else:
+                err_msg = "Hệ thống đang lỗi...Vui lòng đăng nhập lại sau!"
+        else:
+            err_msg = "Mật khẩu không khớp!"
+
+    return render_template('register.html', err_msg=err_msg)
+
 @login.user_loader
 def get_user(user_id):
-    return User.query.get(user_id)
+    return utils.get_user_by_id(user_id=user_id)
 
 
 
