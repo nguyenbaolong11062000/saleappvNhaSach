@@ -1,12 +1,7 @@
 import json, hashlib
-<<<<<<< HEAD
 from saleapp.models import User, UserRole, Product
 from saleapp import db
-
-=======
 from saleapp.models import User, UserRole
->>>>>>> 08b386353ec0bc27e4a9598795ef419bef17fa0e
-
 
 def read_data(path='data/categories.json'):
     with open(path, encoding='utf-8') as f:
@@ -48,18 +43,15 @@ def read_products(cate_id=None, kw=None, from_price=None, to_price=None):
 
 
 def get_product_by_id(product_id):
-<<<<<<< HEAD
     return Product.query.get(product_id)
     # products = read_data('data/products.json')
     # for p in products:
     #     if p['id'] == product_id:
     #         return p
-=======
     products = read_data('data/products.json')
     for p in products:
         if p['id'] == product_id:
             return p
->>>>>>> 08b386353ec0bc27e4a9598795ef419bef17fa0e
 
 def check_login(username, password, role = UserRole.ADMIN):
     password = str(hashlib.md5(password.strip().encode('utf-8')).hexdigest())
@@ -69,7 +61,6 @@ def check_login(username, password, role = UserRole.ADMIN):
                              User.user_role == role).first()
     return user
 
-<<<<<<< HEAD
 
 def add_user(name, email, username, password, avatar_path):
     password = str(hashlib.md5(password.strip().encode('utf-8')).hexdigest())
@@ -83,8 +74,7 @@ def add_user(name, email, username, password, avatar_path):
     except Exception as ex:
         print(ex)
         return False
-
-=======
->>>>>>> 08b386353ec0bc27e4a9598795ef419bef17fa0e
+    
+    
 def get_user_by_id(user_id):
    return User.query.get(user_id)
